@@ -1,4 +1,4 @@
-package com.nithin.junitmockitodemo.controller;
+package com.nithin.junitmockitodemo.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
