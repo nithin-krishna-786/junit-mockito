@@ -1,4 +1,8 @@
-package com.nithin.junitmockitodemo.integration;
+package com.nithin.junitmockitodemo.testcontainers.integration;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nithin.junitmockitodemo.model.Employee;
+import com.nithin.junitmockitodemo.repository.EmployeeRepository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,22 +13,19 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nithin.junitmockitodemo.model.Employee;
-import com.nithin.junitmockitodemo.repository.EmployeeRepository;
-
-import static org.hamcrest.CoreMatchers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-public class EmployeeControllerITests {
-	
+public class EmployeeControllerIT extends AbstractContainerBaseTest {
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -33,12 +34,12 @@ public class EmployeeControllerITests {
 
     @Autowired
     private ObjectMapper objectMapper;
-    
+
     @BeforeEach
     void setup(){
         employeeRepository.deleteAll();
     }
-    
+
     @Test
     public void givenEmployeeObject_whenCreateEmployee_thenReturnSavedEmployee() throws Exception{
 
@@ -199,7 +200,6 @@ public class EmployeeControllerITests {
                 .lastName("Fadatare")
                 .email("ramesh@gmail.com")
                 .build();
-        
         employeeRepository.save(savedEmployee);
 
         // when -  action or the behaviour that we are going test
@@ -209,5 +209,4 @@ public class EmployeeControllerITests {
         response.andExpect(status().isOk())
                 .andDo(print());
     }
-
 }
